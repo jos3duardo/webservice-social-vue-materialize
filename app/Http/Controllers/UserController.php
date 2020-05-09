@@ -35,23 +35,24 @@ class UserController extends Controller
     }
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+        $data = $request->all();
+
+
+        $valiacao = Validator::make($data, [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if($valiacao->fails()){
+            return $valiacao->errors();
         }
 
-        $user->token =  $user->createToken($user->email)->plainTextToken;
-
-        return response()->json([
-            'user' => $user
-        ],200);
+        if(\Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
+            $user = auth()->user();
+            $user->token = $user->createToken($user->email)->accessToken;
+            return $user;
+        }else{
+            return ['status'=>false];
+        }
     }
 }
