@@ -48,12 +48,10 @@ class UserController extends Controller
             ]);
         }
 
-        $token =  $user->createToken($user->email)->plainTextToken;
+        $user->token =  $user->createToken($user->email)->plainTextToken;
 
         return response()->json([
-            'user' => $user->name,
-            'email' => $user->email,
-            'token' => $token
+            'user' => $user
         ],200);
     }
 }
