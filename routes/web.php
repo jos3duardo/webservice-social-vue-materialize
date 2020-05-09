@@ -13,15 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return response()->json([
-//        'message' => 'Welcome Laravel Sanctum',
-//        'author' => 'jos3daurdo',
-//        'email' => 'jos3duardolopes@gmail.com',
-//        'git' => 'https://github.com/jos3duardo'
-//    ],200);
-//});
+Route::get('/', function () {
+    return response()->json([
+        'message' => 'Welcome Laravel Sanctum',
+        'author' => 'jos3daurdo',
+        'email' => 'jos3duardolopes@gmail.com',
+        'git' => 'https://github.com/jos3duardo'
+    ],200);
+});
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
