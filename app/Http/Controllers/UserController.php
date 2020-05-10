@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -59,6 +60,30 @@ class UserController extends Controller
     public function profile(Request $request){
         $user = $request->user();
         $data = $request->all();
+
+        if (isset($data['password'])){
+            $validate = Validator::make($data, [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+            if ($validate->fails()){
+                return $validate->errors();
+            }
+            $user->password = Hash::make($data['password']);
+        }else{
+            $validate = Validator::make($data, [
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            ]);
+            if ($validate->fails()){
+                return $validate->errors();
+            }
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+        }
+
+        $user->save();
 
         $user->token = $user->createToken($user->email)->plainTextToken;
 
