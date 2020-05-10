@@ -60,7 +60,9 @@ class UserController extends Controller
             return ['status'=>false];
         }
     }
-
+    public function user(Request $request){
+        return $request->user();
+    }
     public function profile(Request $request){
         $user = $request->user();
         $data = $request->all();
