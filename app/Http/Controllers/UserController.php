@@ -60,6 +60,8 @@ class UserController extends Controller
         $user = $request->user();
         $data = $request->all();
 
-        return $data;
+        $user->token = $user->createToken($user->email)->plainTextToken;
+
+        return $user;
     }
 }
