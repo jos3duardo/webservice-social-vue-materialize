@@ -98,6 +98,12 @@ class UserController extends Controller
                 mkdir($diretorioPai, 0700);
             }
 
+            if ($user->image){
+                if (file_exists($user->image)){
+                    unlink($user->image);
+                }
+            }
+
             if (!file_exists($diretorioImagem)){
                 mkdir($diretorioImagem, 0700);
             }
