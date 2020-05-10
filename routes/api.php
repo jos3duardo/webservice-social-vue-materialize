@@ -14,11 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::group(['middleware' => 'cors'], function () {
-    Route::post('/login', 'UserController@login');
-    Route::post('/register', 'UserController@register');
-//});
+Route::post('/login', 'UserController@login');
+Route::post('/register', 'UserController@register');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::middleware('auth:sanctum')->put('/profile', 'UserController@profile');

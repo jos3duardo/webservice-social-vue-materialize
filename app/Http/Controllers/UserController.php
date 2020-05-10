@@ -12,15 +12,17 @@ class UserController extends Controller
 {
     public function register(Request $request){
         $data = $request->all();
-//        return $data;
-//        $validate = Validator::make($data, [
-//            'name' => ['required', 'string', 'max:255'],
-//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
-//        ]);
-//        if ($validate){
-//            return $validate->errors();
-//        }
+
+        $validate = Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if ($validate->fails()){
+            return $validate->errors();
+        }
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -29,9 +31,7 @@ class UserController extends Controller
 
         $user->token =  $user->createToken($user->email)->plainTextToken;
 
-        return response()->json([
-            'user' => $user
-        ],200);
+        return $user;
     }
     public function login(Request $request)
     {
@@ -49,10 +49,17 @@ class UserController extends Controller
 
         if(\Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
             $user = auth()->user();
-            $user->token = $user->createToken($user->email)->accessToken;
+            $user->token = $user->createToken($user->email)->plainTextToken;
             return $user;
         }else{
             return ['status'=>false];
         }
+    }
+
+    public function profile(Request $request){
+        $user = $request->user();
+        $data = $request->all();
+
+        return $data;
     }
 }
