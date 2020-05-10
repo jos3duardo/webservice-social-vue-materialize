@@ -24,12 +24,15 @@ class UserController extends Controller
             return $validate->errors();
         }
 
+        $image = '/perfils/default.png';
+
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'image' => $image
         ]);
-
+        $user->image = asset($user->image);
         $user->token =  $user->createToken($user->email)->plainTextToken;
 
         return $user;
