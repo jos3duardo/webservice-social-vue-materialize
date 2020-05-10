@@ -50,6 +50,7 @@ class UserController extends Controller
 
         if(\Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
             $user = auth()->user();
+            $user->image = asset($user->image);
             $user->token = $user->createToken($user->email)->plainTextToken;
             return $user;
         }else{
