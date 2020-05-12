@@ -17,8 +17,8 @@ class CreateContentsTable extends Migration
             $table->id();
             $table->string('title');
             $table->longText('text');
-            $table->string('image');
-            $table->string('link');
+            $table->string('image')->nullable();
+            $table->string('link')->nullable();
             $table->dateTime('data');
 
             $table->unsignedBigInteger('user_id');

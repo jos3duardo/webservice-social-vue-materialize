@@ -17,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', 'UserController@login');
 Route::post('/register', 'UserController@register');
 Route::middleware('auth:sanctum')->put('/profile', 'UserController@profile');
+Route::middleware('auth:sanctum')->post('/content/add', 'ContentController@store');

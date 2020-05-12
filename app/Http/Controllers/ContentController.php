@@ -31,11 +31,27 @@ class ContentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $user = $request->user();
+
+        //validate
+
+        $content = new Content();
+        $content->title = $data['title'];
+        $content->text = $data['text'];
+        $content->image = $data['image'] ? $data['image'] : '#';
+        $content->link = $data['link'] ? $data['link'] : '#';
+        $content->data = date('Y-m-d H:i:s');
+
+        $user->contents()->save($content);
+
+        return [
+            "status" => true,
+            "content" => $user->contents
+        ];
     }
 
     /**
