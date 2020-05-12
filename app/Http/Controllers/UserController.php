@@ -21,7 +21,11 @@ class UserController extends Controller
         ]);
 
         if ($validate->fails()){
-            return $validate->errors();
+            return [
+                "status" => false,
+                "validate" => true,
+                "errors" => $validate->errors()
+            ];
         }
 
         $image = '/perfils/default.png';
@@ -35,23 +39,26 @@ class UserController extends Controller
         $user->image = asset($user->image);
         $user->token =  $user->createToken($user->email)->plainTextToken;
 
-        return $user;
+        return [
+            "status" => true,
+            "user" => $user
+        ];
     }
     public function login(Request $request)
     {
         $data = $request->all();
 
 
-        $valiacao = Validator::make($data, [
+        $validate = Validator::make($data, [
             'email' => 'required|string|email|max:255',
             'password' => 'required|string',
         ]);
 
-        if($valiacao->fails()){
+        if($validate->fails()){
             return [
                 "status" => false,
                 "validate" => true,
-                "errors" => $valiacao->errors()
+                "errors" => $validate->errors()
                 ];
         }
 
