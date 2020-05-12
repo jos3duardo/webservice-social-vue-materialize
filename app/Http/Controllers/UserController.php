@@ -48,14 +48,21 @@ class UserController extends Controller
         ]);
 
         if($valiacao->fails()){
-            return $valiacao->errors();
+            return [
+                "status" => false,
+                "validate" => true,
+                "errors" => $valiacao->errors()
+                ];
         }
 
         if(\Auth::attempt(['email'=>$data['email'],'password'=>$data['password']])){
             $user = auth()->user();
             $user->image = asset($user->image);
             $user->token = $user->createToken($user->email)->plainTextToken;
-            return $user;
+            return [
+                "status" => true,
+                "user" => $user
+            ];
         }else{
             return ['status'=>false];
         }
