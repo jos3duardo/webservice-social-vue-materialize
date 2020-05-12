@@ -11,6 +11,10 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function register(Request $request){
         $data = $request->all();
 
@@ -44,6 +48,11 @@ class UserController extends Controller
             "user" => $user
         ];
     }
+
+    /**
+     * @param Request $request
+     * @return array|bool[]
+     */
     public function login(Request $request)
     {
         $data = $request->all();
@@ -71,12 +80,14 @@ class UserController extends Controller
                 "user" => $user
             ];
         }else{
-            return ['status'=>false];
+            return ['status' => false];
         }
     }
-    public function user(Request $request){
-        return $request->user();
-    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Support\MessageBag|mixed
+     */
     public function profile(Request $request){
         $user = $request->user();
         $data = $request->all();
@@ -88,7 +99,11 @@ class UserController extends Controller
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
             if ($validate->fails()){
-                return $validate->errors();
+                return [
+                    "status" => false,
+                    "validate" => true,
+                    "errors" => $validate->errors()
+                ];
             }
             $user->password = Hash::make($data['password']);
         }else{
@@ -97,7 +112,11 @@ class UserController extends Controller
                 'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             ]);
             if ($validate->fails()){
-                return $validate->errors();
+                return [
+                    "status" => false,
+                    "validate" => true,
+                    "errors" => $validate->errors()
+                ];
             }
             $user->name = $data['name'];
             $user->email = $data['email'];
@@ -130,13 +149,17 @@ class UserController extends Controller
                 return true;
             });
 
-            $valiacao = Validator::make($data, [
+            $validate = Validator::make($data, [
                 'image' => 'base64image',
 
             ],['base64image'=>'Imagem inválida']);
 
-            if($valiacao->fails()){
-                return $valiacao->errors();
+            if($validate->fails()){
+                return [
+                    "status" => false,
+                    "validate" => true,
+                    "errors" => $validate->errors()
+                ];
             }
 
 
@@ -174,6 +197,9 @@ class UserController extends Controller
         $user->image = asset($user->image);
         $user->token = $user->createToken($user->email)->plainTextToken;
 
-        return $user;
+        return [
+            "status" => true,
+            "user" => $user
+        ];
     }
 }
