@@ -178,8 +178,10 @@ class UserController extends Controller
             }
 
             if ($user->image){
-                if (file_exists($user->image)){
-                    unlink($user->image);
+                $imgUser = str_replace(asset('/'), '', $user->image);
+
+                if (file_exists($imgUser)){
+                    unlink($imgUser);
                 }
             }
 
