@@ -18,7 +18,8 @@ Route::get('/', function () {
         'message' => 'Welcome Laravel Sanctum',
         'author' => 'jos3daurdo',
         'email' => 'jos3duardolopes@gmail.com',
-        'git' => 'https://github.com/jos3duardo'
+        'git' => 'https://github.com/jos3duardo',
+        'page' => 'jos3duardo.online'
     ],200);
 });
 
