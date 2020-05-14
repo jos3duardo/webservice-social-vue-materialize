@@ -50,10 +50,9 @@ class ContentController extends Controller
 
         $user->contents()->save($content);
 
-        return [
-            "status" => true,
-            "content" => $user->contents
-        ];
+        $contents = Content::with('user')->orderBy('data','DESC')->paginate(5);
+
+        return [ 'status' => true, 'contents' => $contents ];
     }
 
     /**
