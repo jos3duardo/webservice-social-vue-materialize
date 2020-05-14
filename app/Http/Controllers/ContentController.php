@@ -10,11 +10,11 @@ class ContentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
     public function index()
     {
-        //
+        return Content::with('user')->orderBy('data','DESC')->paginate(5);
     }
 
     /**
