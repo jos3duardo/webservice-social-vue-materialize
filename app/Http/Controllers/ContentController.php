@@ -13,9 +13,16 @@ class ContentController extends Controller
      *
      * @return array
      */
-    public function index()
+    public function index(Request $request)
     {
         $contents = Content::with('user')->orderBy('data','DESC')->paginate(5);
+        $user = $request->user();
+
+        foreach ($contents as $content){
+            $content->total_likes = $content->likes()->count();
+            $like = $user->likes()->find($content->id);
+            $content->like_content = $like ? true : false;
+        }
 
         return [ 'status' => true, 'contents' => $contents ];
     }
@@ -79,7 +86,11 @@ class ContentController extends Controller
         if ($content){
             $user = $request->user();
             $user->likes()->toggle($content->id);
-            return [ 'status' => true, 'likes' => $content->likes()->count() ];
+            return [
+                'status' => true,
+                'likes' => $content->likes()->count(),
+                'list' => $this->index($request)
+                ];
         }else{
             return [ 'status' => false, 'error' => 'Conteudo não existe' ];
         }
