@@ -60,4 +60,6 @@ class User extends Authenticatable
     public function getImageAttribute($value){
         return asset($value);
     }
+
+
 }
