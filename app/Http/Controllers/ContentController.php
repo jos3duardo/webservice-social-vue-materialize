@@ -71,12 +71,18 @@ class ContentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Content  $content
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Content $content
      */
-    public function show(Content $content)
+    public function like(Request $request, Content $content)
     {
-        //
+        if ($content){
+            $user = $request->user();
+            $user->likes()->toggle($content->id);
+            return [ 'status' => true, 'likes' => $content->likes()->count() ];
+        }else{
+            return [ 'status' => false, 'error' => 'Conteudo não existe' ];
+        }
     }
 
     /**
