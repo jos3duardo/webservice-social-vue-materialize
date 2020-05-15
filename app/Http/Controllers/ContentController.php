@@ -20,7 +20,7 @@ class ContentController extends Controller
 
         foreach ($contents as $content){
             $content->total_likes = $content->likes()->count();
-            $content->total_comments = $content->comments()->count();
+            $content->comments = $content->comments;
             $like = $user->likes()->find($content->id);
             $content->like_content = $like ? true : false;
         }
