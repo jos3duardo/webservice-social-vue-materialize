@@ -20,13 +20,14 @@ Route::middleware('auth:sanctum')->put('/profile', 'UserController@profile');
 Route::middleware('auth:sanctum')->post('/content/add', 'ContentController@store');
 Route::middleware('auth:sanctum')->get('/content/list', 'ContentController@index');
 Route::middleware('auth:sanctum')->put('/content/like/{content}', 'ContentController@like');
+Route::middleware('auth:sanctum')->put('/content/comments/{content}', 'ContentController@comments');
 
 
 Route::get('/teste', function (){
-   $teste = \App\Content::all();
-   foreach ($teste as $t){
-       $t->delete();
-   }
+//   $teste = \App\Content::all();
+//   foreach ($teste as $t){
+//       $t->delete();
+//   }
 
    return 'ok';
 });

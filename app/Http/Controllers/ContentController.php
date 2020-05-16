@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Content;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -100,12 +102,30 @@ class ContentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Content  $content
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Content $content
+     * @return array
      */
-    public function edit(Content $content)
+    public function comments(Request $request,Content $content)
     {
-        //
+        $data = $request->all();
+        $user = $request->user();
+
+
+        if ($content){
+            $comment = new Comment();
+            $comment->user_id = $user->id;
+            $comment->content_id = $content->id;
+            $comment->text = $data['texto'];
+            $comment->data = date('Y-m-d H:i:s');
+            $comment->save();
+            return [
+                'status' => true,
+                'list' => $this->index($request)
+            ];
+        }else{
+            return [ 'status' => false, 'error' => 'Conteudo não existe' ];
+        }
     }
 
     /**
