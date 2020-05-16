@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->put('/content/like/{content}', 'ContentContro
 Route::middleware('auth:sanctum')->put('/content/comments/{content}', 'ContentController@comments');
 Route::middleware('auth:sanctum')->get('/content/page/{user}', 'ContentController@page');
 Route::middleware('auth:sanctum')->post('/user/friend', 'UserController@friend');
+Route::middleware('auth:sanctum')->get('/user/list/friend', 'UserController@ListFriend');
+Route::middleware('auth:sanctum')->get('/user/list/page/friend/{user}', 'UserController@ListPageFriend');
 
 
 Route::get('/teste', function (){

@@ -215,4 +215,22 @@ class UserController extends Controller
             return ['status' => false, 'error' => 'Esse usuário não existe'];
         }
     }
+
+
+    public function ListFriend(Request $request){
+        $user = $request->user();
+        if ($user){
+            return [ 'status' => true, 'amigos' => $user->friends ];
+        }else{
+            return ['status' => false, 'error' => 'Esse usuário não existe'];
+        }
+    }
+    public function ListPageFriend(User $user, Request $request){
+        $userLogged = $request->user();
+        if ($user){
+            return [ 'status' => true, 'friend' => $user->friends, 'friendLogged' => $userLogged->friends ];
+        }else{
+            return ['status' => false, 'error' => 'Esse usuário não existe'];
+        }
+    }
 }
