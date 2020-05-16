@@ -57,6 +57,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\User','friends','user_id','friend_id');
     }
 
+    public function followers(){
+        return $this->belongsToMany('App\User','friends','friend_id','user_id');
+    }
+
     public function getImageAttribute($value){
         return asset($value);
     }

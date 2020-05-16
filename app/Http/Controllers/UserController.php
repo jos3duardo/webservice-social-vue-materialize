@@ -210,17 +210,16 @@ class UserController extends Controller
         $friend = User::find($request->id);
         if ($friend && ($user->id != $friend->id)){
             $user->friends()->toggle($friend->id);
-            return [ 'status' => true, 'friends' => $user->friends ];
+            return [ 'status' => true, 'friends' => $user->friends, 'followers' => $user->followers ];
         }else{
             return ['status' => false, 'error' => 'Esse usuário não existe'];
         }
     }
 
-
     public function ListFriend(Request $request){
         $user = $request->user();
         if ($user){
-            return [ 'status' => true, 'friends' => $user->friends ];
+            return [ 'status' => true, 'friends' => $user->friends, 'followers' => $user->followers ];
         }else{
             return ['status' => false, 'error' => 'Esse usuário não existe'];
         }
