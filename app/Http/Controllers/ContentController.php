@@ -51,7 +51,7 @@ class ContentController extends Controller
                 $content->like_content = $like ? true : false;
             }
 
-            return [ 'status' => true, 'contents' => $contents,'user'=>$user,'logado'=> $userLogado ];
+            return [ 'status' => true, 'contents' => $contents,'userPage'=> $user, 'logado'=> $userLogado ];
         }else{
             return [ 'status' => false, 'error' => 'Usuario não existe' ];
         }
