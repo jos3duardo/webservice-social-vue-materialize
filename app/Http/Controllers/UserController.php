@@ -208,7 +208,7 @@ class UserController extends Controller
     public function friend(Request $request){
         $user = $request->user();
         $friend = User::find($request->id);
-        if ($friend){
+        if ($friend && ($user->id != $friend->id)){
             $user->friends()->toggle($friend->id);
             return [ 'status' => true, 'amigos' => $user->friends ];
         }else{
