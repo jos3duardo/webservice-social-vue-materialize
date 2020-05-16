@@ -204,4 +204,15 @@ class UserController extends Controller
             "user" => $user
         ];
     }
+
+    public function friend(Request $request){
+        $user = $request->user();
+        $friend = User::find($request->id);
+        if ($friend){
+            $user->friend()->toggle($friend->id);
+            return [ 'status' => true, 'amigos' => $user->friend ];
+        }else{
+            return ['status' => false, 'error' => 'Esse usuário não existe'];
+        }
+    }
 }

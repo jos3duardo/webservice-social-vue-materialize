@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/content/list', 'ContentController@index
 Route::middleware('auth:sanctum')->put('/content/like/{content}', 'ContentController@like');
 Route::middleware('auth:sanctum')->put('/content/comments/{content}', 'ContentController@comments');
 Route::middleware('auth:sanctum')->get('/content/page/{user}', 'ContentController@page');
+Route::middleware('auth:sanctum')->post('/user/friend', 'UserController@friend');
 
 
 Route::get('/teste', function (){
