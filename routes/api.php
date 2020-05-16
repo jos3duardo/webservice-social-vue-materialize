@@ -24,10 +24,10 @@ Route::middleware('auth:sanctum')->put('/content/comments/{content}', 'ContentCo
 
 
 Route::get('/teste', function (){
-//   $teste = \App\Content::all();
-//   foreach ($teste as $t){
-//       $t->delete();
-//   }
+   $teste = \App\Content::all();
+   foreach ($teste as $t){
+       $t->delete();
+   }
 
    return 'ok';
 });
