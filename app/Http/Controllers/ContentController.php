@@ -57,6 +57,25 @@ class ContentController extends Controller
         }
     }
 
+    public function pageLikes($user,$userL)
+    {
+        $userPage = User::find($user);
+        $userLogged = User::find($userL);
+        if ($userPage){
+            $contents = $userPage->contents()->with('user')->orderBy('data','DESC')->paginate(5);
+            foreach ($contents as $content){
+                $content->total_likes = $content->likes()->count();
+                $content->comments = $content->comments()->with('user')->get();
+                $like = $userLogged->likes()->find($content->id);
+                $content->like_content = $like ? true : false;
+            }
+            return [ 'status' => true, 'contents' => $contents,'userPage'=> $userPage, 'logado'=> $userLogged ];
+        }else{
+            return [ 'status' => false, 'error' => 'Usuario não existe' ];
+        }
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -116,6 +135,21 @@ class ContentController extends Controller
         }
     }
 
+    public function likePage(Request $request, Content $content)
+    {
+        if ($content){
+            $user = $request->user();
+            $user->likes()->toggle($content->id);
+            return [
+                'status' => true,
+                'likes' => $content->likes()->count(),
+                'list' => $this->pageLikes($content->user_id, $request->user()->id)
+                ];
+        }else{
+            return [ 'status' => false, 'error' => 'Conteudo não existe' ];
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -145,26 +179,24 @@ class ContentController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Content $content)
+    public function commentsPage(Request $request,Content $content)
     {
-        //
-    }
+        $data = $request->all();
+        $user = $request->user();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Content $content)
-    {
-        //
+        if ($content){
+            $comment = new Comment();
+            $comment->user_id = $user->id;
+            $comment->content_id = $content->id;
+            $comment->text = $data['texto'];
+            $comment->data = date('Y-m-d H:i:s');
+            $comment->save();
+            return [
+                'status' => true,
+                'list' =>  $this->pageLikes($content->user_id, $request->user()->id)
+            ];
+        }else{
+            return [ 'status' => false, 'error' => 'Conteudo não existe' ];
+        }
     }
 }
