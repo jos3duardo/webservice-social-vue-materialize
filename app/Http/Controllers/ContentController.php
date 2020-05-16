@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Content;
+use App\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -33,11 +34,27 @@ class ContentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @param Request $request
+     * @return array
      */
-    public function create()
+    public function page(User $user, Request $request)
     {
-        //
+        if ($user){
+            $contents = $user->contents()->with('user')->orderBy('data','DESC')->paginate(5);
+            $userLogado = $request->user();
+
+            foreach ($contents as $content){
+                $content->total_likes = $content->likes()->count();
+                $content->comments = $content->comments()->with('user')->get();
+                $like = $userLogado->likes()->find($content->id);
+                $content->like_content = $like ? true : false;
+            }
+
+            return [ 'status' => true, 'contents' => $contents,'user'=>$user,'logado'=> $userLogado ];
+        }else{
+            return [ 'status' => false, 'error' => 'Usuario não existe' ];
+        }
     }
 
     /**

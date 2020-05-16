@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->post('/content/add', 'ContentController@store
 Route::middleware('auth:sanctum')->get('/content/list', 'ContentController@index');
 Route::middleware('auth:sanctum')->put('/content/like/{content}', 'ContentController@like');
 Route::middleware('auth:sanctum')->put('/content/comments/{content}', 'ContentController@comments');
+Route::middleware('auth:sanctum')->get('/content/page/{user}', 'ContentController@page');
 
 
 Route::get('/teste', function (){
