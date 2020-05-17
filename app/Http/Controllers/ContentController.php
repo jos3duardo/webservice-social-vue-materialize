@@ -18,8 +18,10 @@ class ContentController extends Controller
      */
     public function index(Request $request)
     {
-        $contents = Content::with('user')->orderBy('data','DESC')->paginate(5);
         $user = $request->user();
+        $friends = $user->friends()->pluck('id');
+        $friends->push($user->id);
+        $contents = Content::whereIn('user_id', $friends)->with('user')->orderBy('data','DESC')->paginate(5);
 
         foreach ($contents as $content){
             $content->total_likes = $content->likes()->count();
